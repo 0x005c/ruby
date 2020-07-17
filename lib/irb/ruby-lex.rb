@@ -46,12 +46,16 @@ class RubyLex
     end
     if @io.respond_to?(:dynamic_prompt)
       @io.dynamic_prompt do |lines|
+        mode_sign = ""
+        mode_sign = "\e[42m[I]\e[0m " if Reline.core.config.editing_mode_is?(:vi_insert)
+        mode_sign = "\e[41m[C]\e[0m " if Reline.core.config.editing_mode_is?(:vi_command)
+
         lines << '' if lines.empty?
         result = []
         lines.each_index { |i|
           c = lines[0..i].map{ |l| l + "\n" }.join
           ltype, indent, continue, code_block_open = check_state(c)
-          result << @prompt.call(ltype, indent, continue || code_block_open, @line_no + i)
+          result << mode_sign + @prompt.call(ltype, indent, continue || code_block_open, @line_no + i)
         }
         result
       end

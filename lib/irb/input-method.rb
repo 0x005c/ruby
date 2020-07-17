@@ -247,6 +247,7 @@ module IRB
       if Reline.respond_to?("basic_word_break_characters=")
         Reline.basic_word_break_characters = IRB::InputCompletor::BASIC_WORD_BREAK_CHARACTERS
       end
+      Reline.vi_editing_mode
       Reline.completion_append_character = nil
       Reline.completion_proc = IRB::InputCompletor::CompletionProc
       Reline.output_modifier_proc =
